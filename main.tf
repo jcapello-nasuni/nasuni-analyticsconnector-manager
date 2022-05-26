@@ -115,7 +115,7 @@ resource "aws_security_group" "NACSchedulerSecurityGroup" {
 
 resource "null_resource" "update_secGrp" {
   provisioner "local-exec" {
-     command = "sh update_secGrp.sh ${aws_instance.NACScheduler.public_ip} ${var.nac_scheduler_name} ${data.aws_region.current.name} ${var.aws_profile} "
+     command = var.use_private_ip != "Y" ? "sh update_secGrp.sh ${aws_instance.NACScheduler.public_ip} ${var.nac_scheduler_name} ${data.aws_region.current.name} ${var.aws_profile} " : "sh update_secGrp.sh ${aws_instance.NACScheduler.private_ip} ${var.nac_scheduler_name} ${data.aws_region.current.name} ${var.aws_profile} "  
   }
   depends_on = [aws_instance.NACScheduler]
 }
